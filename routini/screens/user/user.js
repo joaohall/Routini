@@ -6,7 +6,7 @@ import {
   BottomSheetModalProvider,
   BottomSheetBackdrop,
 } from "@gorhom/bottom-sheet";
-import { useRef, useCallback } from "react";
+import { useRef, useCallback, useState } from "react";
 import styled from "styled-components";
 import {
   Title,
@@ -16,10 +16,14 @@ import {
   ButtonsList,
   TitlesContainer,
   CategoryTitle,
+  ChangePFP,
+  PFPOptionsContainer,
+  RemovePFP,
 } from "./user.style";
+import { TouchableWithoutFeedback } from "react-native";
 
 export default function User(props) {
-  const snapPoints = ["50% ", "70%"];
+  const snapPoints = ["20% "];
   const accountSheetModalRef = useRef(null);
   function handdleAccountModal() {
     accountSheetModalRef.current?.present();
@@ -36,6 +40,12 @@ export default function User(props) {
     ),
     []
   );
+  const [isEnabledNotification, setIsEnabledNotification] = useState(false);
+  const toggleSwitchNotification = () => setIsEnabledNotification(!isEnabledNotification);
+
+  const [isEnabledDarkTheme, setIsEnabledDarkTheme] = useState(false);
+  const toggleSwitchTheme = () => setIsEnabledDarkTheme(!isEnabledDarkTheme);
+
 
   const ButtonModal = styled.Button``;
   return (
@@ -44,18 +54,35 @@ export default function User(props) {
         <SafeAreaView style={{ flex: 1, backgroundColor: "#f7f7f7" }}>
           <ButtonsList>
             <TitlesContainer>
-              <Title>Olá, João</Title>
+              <Title>Seu perfil</Title>
             </TitlesContainer>
-            <Avatar
-              source={require("../../assets/profilepictureplaceholder.jpg")}
-            ></Avatar>
+            <TouchableWithoutFeedback onLongPress={handdleAccountModal}>
+              <Avatar
+                source={require("../../assets/profilepictureplaceholder.jpg")}
+              ></Avatar>
+            </TouchableWithoutFeedback>
             <CategoryTitle>Configurações da conta</CategoryTitle>
+            <ConfigButton title="Trocar o route" />
             <ConfigButton title="Editar perfil" />
             <ConfigButton title="Mudar senha" />
-            <ConfigSwitcher title="Notficações" />
-            <ConfigSwitcher title="Modo escuro" />
+            <ConfigSwitcher
+              trackColor={{ false: "#767577", true: "#81b0ff" }}
+              thumbColor={isEnabledNotification ? "#f4f3f4" : "#f4f3f4"}
+              ios_backgroundColor="#3e3e3e"
+              onValueChange={toggleSwitchNotification}
+              value={isEnabledNotification}
+              title="Notificações"
+            />
+            <ConfigSwitcher
+              trackColor={{ false: "#767577", true: "#81b0ff" }}
+              thumbColor={isEnabledDarkTheme ? "#f4f3f4" : "#f4f3f4"}
+              ios_backgroundColor="#3e3e3e"
+              onValueChange={toggleSwitchTheme}
+              value={isEnabledDarkTheme}
+              title="Modo escuro"
+            />
             <CategoryTitle>Configurações adicionais</CategoryTitle>
-            <ConfigButton title="Sobre nos" />
+            <ConfigButton title="Sobre nós" />
             <ConfigButton title="Politica de privacidade" />
             <ConfigButton title="Termos e condições" />
             <ConfigButton title="Sair" color="red" />
@@ -66,7 +93,12 @@ export default function User(props) {
             index={0}
             snapPoints={snapPoints}
             backdropComponent={renderBackdrop}
-          ></BottomSheetModal>
+          >
+            <PFPOptionsContainer>
+              <ChangePFP />
+              <RemovePFP />
+            </PFPOptionsContainer>
+          </BottomSheetModal>
         </SafeAreaView>
       </BottomSheetModalProvider>
     </GestureHandlerRootView>

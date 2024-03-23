@@ -6,11 +6,13 @@ import * as NavigationBar from "expo-navigation-bar";
 import Notes from "./screens/notes/notes";
 import Task from "./screens/task/task.js";
 import User from "./screens/user/user";
+import Dashboard from "./screens/dashboard/dashboard";
 
 //Icons
 import AccountIcon from "./assets/account_circle";
 import NotesIcon from "./assets/notes";
 import TaskIcon from "./assets/tasks";
+import DashboardIcon from "./assets/dashboard";
 
 const Tab = createBottomTabNavigator();
 
@@ -34,6 +36,16 @@ export default function App() {
           
         }}
       >
+              <Tab.Screen
+          name="Dashboard"
+          component={Dashboard}
+          options={{
+            tabBarButton: (props) => <TouchableOpacity {...props} />,
+            tabBarIcon: ({ focused, color }) => (
+              <DashboardIcon color={focused ? color : "black"} />
+            ),
+          }}
+        />
         <Tab.Screen
           name="Tarefas"
           component={Task}
